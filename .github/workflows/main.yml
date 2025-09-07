@@ -1,39 +1,48 @@
-
 name: Pulumi - CI
 
 on:
   push:
     branches:
-      - main
-      - feature/configure-ci-cd-pipeline
+      - 'main'
 
 jobs:
   update:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Checkout
         id: checkout
         uses: actions/checkout@v4
 
-      - name: Install Node.js
+      - name: Install Node
         id: install-node
         uses: actions/setup-node@v4
         with:
-          node-version-file: 'package.json'
+          node-version-file: package.json
 
       - name: Install pnpm
         id: install-pnpm
-        run: pnpm/action-setup@v4
-
+        uses: pnpm/action-setup@v4
+        with:
+          version: 8
 
       - name: Install dependencies
         id: install-dependencies
-        run: pnpm install
+        run: |
+          pnpm install
 
-      - name: configure AWS Credentials
+      - name: Configure AWS Credentials
         id: configure-aws-credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      - name: Run Pulumi
+        id: run-pulumi
+        uses: pulumi/actions@v6
+        with:
+          command: up
+          stack-name: andrecantarino-org/stg
+        env:
+          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}

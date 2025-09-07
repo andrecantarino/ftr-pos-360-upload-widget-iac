@@ -1,0 +1,10 @@
+name: ftr-pos-360-rocketseat-iac
+description: Projeto IAC Pos FTR 360
+runtime:
+  name: nodejs
+  options:
+    packagemanager: pnpm
+config:
+  pulumi:tags:
+    value:
+      pulumi:template: aws-typescript

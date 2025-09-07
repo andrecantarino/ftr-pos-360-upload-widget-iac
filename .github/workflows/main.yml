@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - 'main'
+      - 'feature/configure-ci-cd-pipeline'
 
 jobs:
   update:

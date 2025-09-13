@@ -1,12 +1,12 @@
-name: Pulumi - CI
+name: Pulumi - Check
 
 on:
-  push:
+  pull_request:
     branches:
       - 'main'
 
 jobs:
-  update:
+  preview:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -42,7 +42,7 @@ jobs:
         id: run-pulumi
         uses: pulumi/actions@v6
         with:
-          command: up
+          command: preview
           stack-name: stg
           cloud-url: s3://rocketseat-pulumi-state-andre-cantarino
         env:
